@@ -1,0 +1,38 @@
+{
+  "schema_version": "0.1",
+  "account": {
+    "id": "fixture-account-low-search",
+    "name": "Bek Mebel fixture — low search volume",
+    "status": "ENABLED",
+    "eligibility": "ELIGIBLE"
+  },
+  "campaigns": [
+    {
+      "id": "campaign-low-search-volume",
+      "name": "Search — narrow demand",
+      "status": "ENABLED",
+      "serving_status": "ELIGIBLE",
+      "start_date": "2026-01-01",
+      "end_date": null,
+      "budget": {"amount_micros": 10000000, "period": "DAILY", "status": "ACTIVE"},
+      "bidding": {"strategy": "MANUAL_CPC", "requires_conversions": false},
+      "targeting": {"locations": ["Almaty"], "languages": ["ru"], "restrictions": []},
+      "conversion": {"configured": false, "primary_action_count": 0, "usable_count": 0, "recent_count": 0, "tracking_status": "NOT_CONFIGURED"},
+      "performance": {"window_days": 30, "impressions": 2, "clicks": 0, "cost_micros": 0, "api_evidence_complete": true},
+      "ad_groups": [
+        {
+          "id": "ad-group-low-search",
+          "name": "Custom bedroom furniture",
+          "status": "ENABLED",
+          "serving_status": "ELIGIBLE",
+          "ads": [{"id": "ad-low-search", "name": "Responsive search ad", "status": "ENABLED", "policy_status": "APPROVED", "serving_status": "ELIGIBLE"}],
+          "keywords": [
+            {"id": "keyword-low-001", "text": "custom bedroom furniture one", "status": "LOW_SEARCH_VOLUME", "serving_status": "LOW_SEARCH_VOLUME", "low_search_volume": true},
+            {"id": "keyword-low-002", "text": "custom bedroom furniture two", "status": "LOW_SEARCH_VOLUME", "serving_status": "LOW_SEARCH_VOLUME", "low_search_volume": true},
+            {"id": "keyword-eligible-001", "text": "bedroom furniture", "status": "ENABLED", "serving_status": "ELIGIBLE", "low_search_volume": false}
+          ]
+        }
+      ]
+    }
+  ]
+}

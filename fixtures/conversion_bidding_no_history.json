@@ -1,0 +1,34 @@
+{
+  "schema_version": "0.1",
+  "account": {
+    "id": "fixture-account-conversion",
+    "name": "Bek Mebel fixture — conversion bidding",
+    "status": "ENABLED",
+    "eligibility": "ELIGIBLE"
+  },
+  "campaigns": [
+    {
+      "id": "campaign-conversion-no-history",
+      "name": "Search — conversion bidding without history",
+      "status": "ENABLED",
+      "serving_status": "ELIGIBLE",
+      "start_date": "2026-01-01",
+      "end_date": null,
+      "budget": {"amount_micros": 10000000, "period": "DAILY", "status": "ACTIVE"},
+      "bidding": {"strategy": "TARGET_CPA", "requires_conversions": true, "target_cpa_micros": 5000000},
+      "targeting": {"locations": ["Almaty"], "languages": ["ru"], "restrictions": []},
+      "conversion": {"configured": true, "primary_action_count": 1, "usable_count": 0, "recent_count": 0, "tracking_status": "NO_RECENT_DATA"},
+      "performance": {"window_days": 30, "impressions": 25, "clicks": 1, "cost_micros": 100000, "api_evidence_complete": true},
+      "ad_groups": [
+        {
+          "id": "ad-group-conversion",
+          "name": "Bedroom furniture",
+          "status": "ENABLED",
+          "serving_status": "ELIGIBLE",
+          "ads": [{"id": "ad-conversion", "name": "Responsive search ad", "status": "ENABLED", "policy_status": "APPROVED", "serving_status": "ELIGIBLE"}],
+          "keywords": [{"id": "keyword-conversion", "text": "bedroom furniture", "status": "ENABLED", "serving_status": "ELIGIBLE", "low_search_volume": false}]
+        }
+      ]
+    }
+  ]
+}

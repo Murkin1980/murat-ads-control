@@ -45,3 +45,18 @@ Murat Ads Control is independent from MPE, Business Discovery, Leadgen Agent, an
 ## Start here for Arena
 
 Open `docs/ARENA_MVP_TASK.md` and execute only `CP-001`. Stop after CP-001 and report results before attempting real Google credentials or CP-002.
+
+## CP-001 local run
+
+The fixture-driven path uses only the Python standard library:
+
+```bash
+python -m unittest discover -s tests -v
+python -m murat_ads_control \
+  --fixture fixtures/eligible_zero_impressions.json \
+  --as-of 2026-09-16 \
+  --json-out report.json \
+  --markdown-out report.md
+```
+
+This implements `LOAD/READ → NORMALIZE → DIAGNOSE → REPORT` for sanitized fixtures. Real Google Ads authentication is intentionally deferred to CP-002.
