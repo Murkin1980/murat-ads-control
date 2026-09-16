@@ -1,8 +1,8 @@
-"""Safe runtime configuration contract reserved for the later real adapter.
+"""Runtime configuration for the read-only Google Ads adapter.
 
-This checkpoint deliberately does not authenticate or instantiate a Google Ads
-client. It only names values that a future adapter may receive from the
-runtime environment; secret values are never stored in this repository.
+Secret values are checked for presence at the adapter boundary and remain in
+runtime environment storage. They are never put into the configuration object,
+normalized state, logs, or reports.
 """
 
 from __future__ import annotations
@@ -13,12 +13,17 @@ from typing import Mapping
 
 
 class ConfigurationError(ValueError):
-    """Raised when a future runtime configuration is incomplete."""
+    """Raised when required runtime configuration is incomplete."""
 
 
 @dataclass(frozen=True)
 class GoogleAdsRuntimeConfig:
-    """Non-secret account identifiers plus names of runtime secret variables."""
+    """Account selection plus names of runtime-injected secret variables.
+
+    Secret values are intentionally not fields on this object. The official
+    client loads them from the environment only after ``require_credentials``
+    has passed.
+    """
 
     customer_id: str
     login_customer_id: str | None
@@ -29,16 +34,12 @@ class GoogleAdsRuntimeConfig:
 
     @classmethod
     def from_environment(cls, environ: Mapping[str, str] | None = None) -> "GoogleAdsRuntimeConfig":
-        """Read identifiers and secret *names* from runtime environment only.
-
-        The secret values are intentionally not returned. CP-002 will decide
-        how a real read-only adapter receives them.
-        """
+        """Read non-secret account selection and secret variable names only."""
 
         values = os.environ if environ is None else environ
         customer_id = values.get("GOOGLE_ADS_CUSTOMER_ID", "").strip()
         if not customer_id:
-            raise ConfigurationError("GOOGLE_ADS_CUSTOMER_ID is required at runtime")
+            raise ConfigurationError("Missing required Google Ads configuration: GOOGLE_ADS_CUSTOMER_ID")
         login_customer_id = values.get("GOOGLE_ADS_LOGIN_CUSTOMER_ID", "").strip() or None
         return cls(customer_id=customer_id, login_customer_id=login_customer_id)
 
@@ -50,3 +51,12 @@ class GoogleAdsRuntimeConfig:
             self.client_secret_env,
             self.refresh_token_env,
         )
+
+    def require_credentials(self, environ: Mapping[str, str] | None = None) -> None:
+        """Fail closed while reporting only names of missing configuration."""
+
+        values = os.environ if environ is None else environ
+        missing = [name for name in self.secret_environment_names if not values.get(name, "").strip()]
+        if missing:
+            joined = ", ".join(missing)
+            raise ConfigurationError(f"Missing required Google Ads configuration: {joined}")

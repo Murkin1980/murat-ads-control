@@ -83,6 +83,47 @@ Begin `CP-002 — Google Ads read-only connection`: implement and test a real re
 
 ---
 
+## HANDOFF-002 — CP-002 adapter complete, external account pending
+
+**Date:** 2026-09-16
+**From:** Arena implementation session
+**To:** next Arena/Codex/agent session
+
+### Objective
+Implement only the real Google Ads read-only connection behind the existing CP-001 provider contract.
+
+### Completed
+- Added `GoogleAdsProvider.read_state()` with no provider write service or mutation method.
+- Added runtime fail-closed credential presence checks and optional MCC login customer ID.
+- Added official `google-ads>=25.0.0` dependency only for real mode.
+- Added six focused GAQL reads and mapping into the existing normalized model.
+- Added `--google-ads`; fixture mode remains unchanged.
+- Added three CP-002 tests; all CP-001 tests remain green.
+- Updated checkpoint, decision, diff, and README records.
+
+### Current state
+The mocked real-provider path reaches `READ → NORMALIZE → DIAGNOSE → REPORT`. Real-account validation is `PENDING_EXTERNAL_CREDENTIALS`; required credential environment variables were absent in this execution environment.
+
+### Evidence / refs
+- Runtime adapter: `murat_ads_control/google_ads.py`
+- Runtime configuration: `murat_ads_control/config.py`
+- Dependency: `requirements.txt`
+- Read-only mode: `python -m murat_ads_control --google-ads`
+
+### Decisions made
+Keep one provider method, use six minimum query slices, load credentials through the official client's environment loader, and keep SDK objects and raw API payloads outside the normalized/reporting layers.
+
+### Blockers
+No implementation blocker. External credentials are required for a real account smoke run.
+
+### Do not do
+Do not add mutation services, OAuth web UI, databases, account discovery, multi-tenancy, GSC, GA4, Meta, MiniBase, SaaS, or CP-003 logic.
+
+### Exact next action
+When approved and credentials are available, run one sanitized `--google-ads` read-only smoke report. Then propose only the smallest CP-003 work for real-provider diagnostic evidence.
+
+---
+
 ## Template
 
 ### HANDOFF-NNN — Title

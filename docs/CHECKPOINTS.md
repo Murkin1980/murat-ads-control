@@ -51,9 +51,41 @@ The fixture-driven read-only vertical slice is working. Findings include status/
 
 ---
 
+## CP-002 — Google Ads read-only connection
+
+**Date:** 2026-09-16
+**Status:** PENDING_EXTERNAL_CREDENTIALS
+
+### Entering state
+CP-001 fixture provider, normalized model, diagnostics, reports, and CLI were complete. No official Google Ads dependency or real adapter existed.
+
+### Changes
+- Added `GoogleAdsProvider` behind the existing one-operation `ReadOnlyAdsProvider.read_state()` contract.
+- Added runtime-only configuration validation for one customer ID, four required Google Ads credential environment names, and optional `GOOGLE_ADS_LOGIN_CUSTOMER_ID`.
+- Added the official `google-ads` dependency only for `--google-ads` mode; fixture mode remains standard-library-only.
+- Added six read-only GAQL slices: customer status, campaign configuration, 30-day campaign performance, ads/ad groups, keywords, and campaign location/language targeting.
+- Mapped SDK-shaped responses into the existing raw snapshot and provider-independent normalized model without SDK objects entering diagnostics.
+- Extended the CLI with mutually exclusive `--fixture` and `--google-ads` modes.
+- Added mocked provider tests for credential failure, mappings, report output, and absence of mutation methods.
+
+### Evidence
+- `python -m unittest discover -s tests -v` — 8 tests passed.
+- Fixture mode still runs and produces the same CP-001 report structure.
+- `--google-ads` without credentials fails closed with configuration field names only.
+- Official client import/API surface was verified from `google-ads>=25.0.0` in an isolated environment.
+- Real-account validation: `PENDING_EXTERNAL_CREDENTIALS`; no credential environment variables were available.
+
+### Exit state
+The real-provider mocked vertical slice works through `READ → NORMALIZE → DIAGNOSE → REPORT`. No Google Ads mutation service or method is wrapped or exposed. Real-account evidence is intentionally not claimed.
+
+### Next checkpoint
+`CP-003 — Diagnostic engine v0 on real provider data` (proposal only; not implemented in this checkpoint).
+
+---
+
 ## Planned sequence
 
-- `CP-002` — Google Ads read-only connection
+- `CP-002` — Google Ads read-only connection (implementation complete; real validation pending)
 - `CP-003` — Diagnostic engine v0 on real provider data
 - `CP-004` — Bek Mebel real diagnostic / EXP-001 decision
 - `CP-005` — Reduction pass: remove everything not needed by the proven core
