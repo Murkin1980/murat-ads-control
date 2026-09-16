@@ -20,6 +20,8 @@ No campaign mutation, automatic spend changes, SaaS UI, billing, GSC, GA4, Meta 
 - `docs/PRODUCT_ARCHITECTURE_AND_IDEAS.md` — long-term product ideas + implementation status
 - `docs/ARCHITECTURE.md` — current technical architecture and boundaries
 - `docs/PROJECT_RULES.md` — minimal project governance
+- `docs/ROADMAP_MVP.md` — checkpoint-by-checkpoint MVP roadmap
+- `docs/ARENA_MVP_TASK.md` — canonical Arena task packet for the first implementation checkpoint
 - `docs/EXPERIMENTS.md` — experiment registry and PASS/FAIL evidence
 - `docs/CHECKPOINTS.md` — durable progress checkpoints
 - `docs/HANDOFFS.md` — session/agent handoffs
@@ -39,3 +41,7 @@ Murat Ads Control is independent from MPE, Business Discovery, Leadgen Agent, an
 ## First target
 
 `bek-mebel.kz` — diagnose why the existing Google Ads campaign appears healthy but does not meaningfully deliver/spend.
+
+## Start here for Arena
+
+Open `docs/ARENA_MVP_TASK.md` and execute only `CP-001`. Stop after CP-001 and report results before attempting real Google credentials or CP-002.
