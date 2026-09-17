@@ -53,7 +53,7 @@ The fixture-driven read-only vertical slice is working. Findings include status/
 
 ## CP-002 — Google Ads read-only connection
 
-**Date:** 2026-09-16
+**Date:** 2026-09-16  
 **Status:** PENDING_EXTERNAL_CREDENTIALS
 
 ### Entering state
@@ -67,25 +67,31 @@ CP-001 fixture provider, normalized model, diagnostics, reports, and CLI were co
 - Mapped SDK-shaped responses into the existing raw snapshot and provider-independent normalized model without SDK objects entering diagnostics.
 - Extended the CLI with mutually exclusive `--fixture` and `--google-ads` modes.
 - Added mocked provider tests for credential failure, mappings, report output, and absence of mutation methods.
+- PR #1 merged the CP-001/CP-002 implementation into `main` on 2026-09-17.
 
 ### Evidence
-- `python -m unittest discover -s tests -v` — 8 tests passed.
+- `python -m unittest discover -s tests -v` — 8 tests passed in Arena implementation evidence.
 - Fixture mode still runs and produces the same CP-001 report structure.
 - `--google-ads` without credentials fails closed with configuration field names only.
 - Official client import/API surface was verified from `google-ads>=25.0.0` in an isolated environment.
-- Real-account validation: `PENDING_EXTERNAL_CREDENTIALS`; no credential environment variables were available.
+- Real Google Ads account access was independently confirmed on 2026-09-17 through an already-connected read-only OAuth connector for account `9687071768` (`bek mebel`).
+- The connector returned live/cached-live campaign data for `Performance Max-1`, including 12,700 impressions, 949 clicks, USD 20.43 spend, and 0 conversions for 2026-08-17 through 2026-09-16.
+- This external read proves the target account is reachable, but it does **not** prove the repository's own `GoogleAdsProvider` runtime path because the repository runtime credential variables are still unavailable here.
 
 ### Exit state
-The real-provider mocked vertical slice works through `READ → NORMALIZE → DIAGNOSE → REPORT`. No Google Ads mutation service or method is wrapped or exposed. Real-account evidence is intentionally not claimed.
+The code is merged to `main`, the target Google Ads account is reachable read-only, and the mocked provider vertical slice works through `READ → NORMALIZE → DIAGNOSE → REPORT`. Repository-native real-account E2E validation remains pending; no Google Ads mutation service or method is wrapped or exposed.
+
+### Blocker
+Provide/inject the repository runtime credential set (`GOOGLE_ADS_DEVELOPER_TOKEN`, `GOOGLE_ADS_CLIENT_ID`, `GOOGLE_ADS_CLIENT_SECRET`, `GOOGLE_ADS_REFRESH_TOKEN`, plus `GOOGLE_ADS_CUSTOMER_ID=9687071768`) in an execution environment that can run `python -m murat_ads_control --google-ads`. Credential values must not be committed or written into project docs.
 
 ### Next checkpoint
-`CP-003 — Diagnostic engine v0 on real provider data` (proposal only; not implemented in this checkpoint).
+`CP-003 — Diagnostic engine v0 on real provider data` starts only after the repository-native E2E read succeeds.
 
 ---
 
 ## Planned sequence
 
-- `CP-002` — Google Ads read-only connection (implementation complete; real validation pending)
+- `CP-002` — Google Ads read-only connection (implementation merged; repository-native real validation pending)
 - `CP-003` — Diagnostic engine v0 on real provider data
 - `CP-004` — Bek Mebel real diagnostic / EXP-001 decision
 - `CP-005` — Reduction pass: remove everything not needed by the proven core
