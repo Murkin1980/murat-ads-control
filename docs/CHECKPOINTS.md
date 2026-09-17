@@ -74,7 +74,7 @@ CP-001 fixture provider, normalized model, diagnostics, reports, and CLI were co
 - Fixture mode still runs and produces the same CP-001 report structure.
 - `--google-ads` without credentials fails closed with configuration field names only.
 - Official client import/API surface was verified from `google-ads>=25.0.0` in an isolated environment.
-- Real Google Ads account access was independently confirmed on 2026-09-17 through an already-connected read-only OAuth connector for account `9687071768` (`bek mebel`).
+- Real Google Ads account access was independently confirmed on 2026-09-17 through an already-connected read-only OAuth connector for the Bek Mebel account.
 - The connector returned live/cached-live campaign data for `Performance Max-1`, including 12,700 impressions, 949 clicks, USD 20.43 spend, and 0 conversions for 2026-08-17 through 2026-09-16.
 - This external read proves the target account is reachable, but it does **not** prove the repository's own `GoogleAdsProvider` runtime path because the repository runtime credential variables are still unavailable here.
 
@@ -82,7 +82,7 @@ CP-001 fixture provider, normalized model, diagnostics, reports, and CLI were co
 The code is merged to `main`, the target Google Ads account is reachable read-only, and the mocked provider vertical slice works through `READ → NORMALIZE → DIAGNOSE → REPORT`. Repository-native real-account E2E validation remains pending; no Google Ads mutation service or method is wrapped or exposed.
 
 ### Blocker
-Provide/inject the repository runtime credential set (`GOOGLE_ADS_DEVELOPER_TOKEN`, `GOOGLE_ADS_CLIENT_ID`, `GOOGLE_ADS_CLIENT_SECRET`, `GOOGLE_ADS_REFRESH_TOKEN`, plus `GOOGLE_ADS_CUSTOMER_ID=9687071768`) in an execution environment that can run `python -m murat_ads_control --google-ads`. Credential values must not be committed or written into project docs.
+Inject the repository runtime credential set (`GOOGLE_ADS_DEVELOPER_TOKEN`, `GOOGLE_ADS_CLIENT_ID`, `GOOGLE_ADS_CLIENT_SECRET`, `GOOGLE_ADS_REFRESH_TOKEN`, plus the target `GOOGLE_ADS_CUSTOMER_ID`) in an execution environment that can run `python -m murat_ads_control --google-ads`. Credential values and account identifiers must not be committed or written into public project docs.
 
 ### Next checkpoint
 Repository-native E2E validation remains the only unfinished CP-002 exit criterion.
@@ -116,7 +116,37 @@ The diagnostic engine had already been implemented as part of the CP-001 vertica
 The v0 diagnostic contract is proven without adding another engine or abstraction. CP-003 is complete independently of the still-pending CP-002 repository-native credentialed read.
 
 ### Next checkpoint
-`CP-004 — Bek Mebel real diagnostic / EXP-001 decision` can be prepared from external read-only evidence, but final EXP-001 PASS requires the repository-native CP-002 E2E read.
+`CP-004 — Bek Mebel real diagnostic / EXP-001 decision`.
+
+---
+
+## CP-004 — Bek Mebel real diagnostic / EXP-001 decision
+
+**Date:** 2026-09-17  
+**Status:** IN_PROGRESS
+
+### Entering state
+The target account is reachable through an external read-only OAuth connector, CP-003 is proven, but the repository-native credentialed read remains blocked.
+
+### Evidence collected
+- 30-day external read-only evidence for `Performance Max-1`: 12,700 impressions, 949 clicks, USD 20.43 spend, 0 conversions.
+- This falsifies the current form of the original "not delivering" hypothesis for the observed window: meaningful auction delivery and traffic are present.
+- The unresolved problem is now downstream: zero recorded conversions despite traffic.
+- The available evidence does not distinguish tracking failure, traffic/landing-page conversion failure, or conversion-goal configuration mismatch.
+- Provisional evidence is frozen in `docs/evidence/CP004_PROVISIONAL_REAL_DIAGNOSTIC_2026-09-17.md`.
+
+### Current finding
+`WARNING` — delivery exists, but no conversions are recorded in the observed window. Root cause remains intentionally unclaimed until conversion configuration is verified through the trusted read path.
+
+### Blockers
+- Repository-native CP-002 E2E still requires runtime-injected Google Ads credentials.
+- The external ads connector quota is exhausted for the current billing period, so no additional external live account reads can be used to close the uncertainty now.
+
+### EXP-001 decision
+`PENDING` — do not mark PASS or FAIL yet.
+
+### Next checkpoint
+After repository-native E2E succeeds, rerun the same account through `READ → NORMALIZE → DIAGNOSE → REPORT`, freeze sanitized evidence, then decide EXP-001.
 
 ---
 
@@ -124,7 +154,7 @@ The v0 diagnostic contract is proven without adding another engine or abstractio
 
 - `CP-002` — Google Ads read-only connection (implementation merged; repository-native real validation pending)
 - `CP-003` — Diagnostic engine v0 contract — COMPLETE
-- `CP-004` — Bek Mebel real diagnostic / EXP-001 decision
+- `CP-004` — Bek Mebel real diagnostic / EXP-001 decision — IN_PROGRESS
 - `CP-005` — Reduction pass: remove everything not needed by the proven core
 
 Canonical detail: `docs/ROADMAP_MVP.md`.
