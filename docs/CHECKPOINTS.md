@@ -85,14 +85,45 @@ The code is merged to `main`, the target Google Ads account is reachable read-on
 Provide/inject the repository runtime credential set (`GOOGLE_ADS_DEVELOPER_TOKEN`, `GOOGLE_ADS_CLIENT_ID`, `GOOGLE_ADS_CLIENT_SECRET`, `GOOGLE_ADS_REFRESH_TOKEN`, plus `GOOGLE_ADS_CUSTOMER_ID=9687071768`) in an execution environment that can run `python -m murat_ads_control --google-ads`. Credential values must not be committed or written into project docs.
 
 ### Next checkpoint
-`CP-003 — Diagnostic engine v0 on real provider data` starts only after the repository-native E2E read succeeds.
+Repository-native E2E validation remains the only unfinished CP-002 exit criterion.
+
+---
+
+## CP-003 — Diagnostic engine v0 contract
+
+**Date:** 2026-09-17  
+**Status:** COMPLETE
+
+### Entering state
+The diagnostic engine had already been implemented as part of the CP-001 vertical slice, but CP-003 acceptance criteria were not independently proven as a checkpoint.
+
+### Changes
+- Reused the existing diagnostic engine instead of creating a duplicate layer.
+- Added focused checkpoint tests for all eight rule families in the MVP roadmap.
+- Added coverage proving multiple simultaneous findings are preserved instead of collapsed into a single explanation.
+- Added deterministic outcome-precedence coverage for `BLOCKED`, `GOOGLE_ACTION_REQUIRED`, `WARNING`, and `OK` behavior.
+- Added one minimal GitHub Actions guard that runs the repository unit tests on pull requests and pushes to `main`.
+- PR #2 merged the CP-003 proof pass into `main`.
+
+### Evidence
+- GitHub Actions run `35222278182` completed successfully on Python 3.12 / Ubuntu.
+- `python -m unittest discover -s tests -v` completed successfully in that run.
+- The CP-003 suite proves account/campaign state or date blockers, unusable budget, ad policy eligibility, ad-group eligibility, keyword low-search-volume/ineligibility, targeting restrictions, conversion-dependent bidding without usable history, and zero/near-zero auction activity.
+- Findings retain evidence, recommended action, confidence, and uncertainty.
+- Simultaneous `BLOCKED` and `GOOGLE_ACTION_REQUIRED` findings remain visible while the overall outcome follows deterministic precedence.
+
+### Exit state
+The v0 diagnostic contract is proven without adding another engine or abstraction. CP-003 is complete independently of the still-pending CP-002 repository-native credentialed read.
+
+### Next checkpoint
+`CP-004 — Bek Mebel real diagnostic / EXP-001 decision` can be prepared from external read-only evidence, but final EXP-001 PASS requires the repository-native CP-002 E2E read.
 
 ---
 
 ## Planned sequence
 
 - `CP-002` — Google Ads read-only connection (implementation merged; repository-native real validation pending)
-- `CP-003` — Diagnostic engine v0 on real provider data
+- `CP-003` — Diagnostic engine v0 contract — COMPLETE
 - `CP-004` — Bek Mebel real diagnostic / EXP-001 decision
 - `CP-005` — Reduction pass: remove everything not needed by the proven core
 
