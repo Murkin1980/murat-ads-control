@@ -1,0 +1,34 @@
+{
+  "schema_version": "0.1",
+  "account": {
+    "id": "fixture-account-disabled",
+    "name": "Bek Mebel fixture — disabled campaign",
+    "status": "ENABLED",
+    "eligibility": "ELIGIBLE"
+  },
+  "campaigns": [
+    {
+      "id": "campaign-disabled-date-blocked",
+      "name": "Search — disabled and future dated",
+      "status": "PAUSED",
+      "serving_status": "PAUSED",
+      "start_date": "2026-10-01",
+      "end_date": null,
+      "budget": {"amount_micros": 10000000, "period": "DAILY", "status": "ACTIVE"},
+      "bidding": {"strategy": "MANUAL_CPC", "requires_conversions": false},
+      "targeting": {"locations": ["Almaty"], "languages": ["ru"], "restrictions": []},
+      "conversion": {"configured": false, "primary_action_count": 0, "usable_count": 0, "recent_count": 0, "tracking_status": "NOT_CONFIGURED"},
+      "performance": {"window_days": 30, "impressions": 0, "clicks": 0, "cost_micros": 0, "api_evidence_complete": true},
+      "ad_groups": [
+        {
+          "id": "ad-group-disabled-date",
+          "name": "Bedroom furniture",
+          "status": "ENABLED",
+          "serving_status": "ELIGIBLE",
+          "ads": [{"id": "ad-disabled-date", "name": "Responsive search ad", "status": "ENABLED", "policy_status": "APPROVED", "serving_status": "ELIGIBLE"}],
+          "keywords": [{"id": "keyword-disabled-date", "text": "bedroom furniture", "status": "ENABLED", "serving_status": "ELIGIBLE", "low_search_volume": false}]
+        }
+      ]
+    }
+  ]
+}

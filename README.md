@@ -44,4 +44,46 @@ Murat Ads Control is independent from MPE, Business Discovery, Leadgen Agent, an
 
 ## Start here for Arena
 
-Open `docs/ARENA_MVP_TASK.md` and execute only `CP-001`. Stop after CP-001 and report results before attempting real Google credentials or CP-002.
+Read the canonical task and checkpoint docs before changing code. CP-001 is the fixture baseline; CP-002 adds only the strictly read-only Google Ads connection.
+
+## CP-001 fixture run
+
+Fixture mode uses only the Python standard library and remains available without Google credentials:
+
+```bash
+python -m unittest discover -s tests -v
+python -m murat_ads_control \
+  --fixture fixtures/eligible_zero_impressions.json \
+  --as-of 2026-09-16 \
+  --json-out /tmp/murat-report.json \
+  --markdown-out /tmp/murat-report.md
+```
+
+## CP-002 Google Ads read-only run
+
+Install the official client only when using Google Ads mode:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+Inject these names through the runtime environment. Values must not be placed in repository files, fixtures, reports, or logs:
+
+- `GOOGLE_ADS_CUSTOMER_ID` — required customer ID;
+- `GOOGLE_ADS_DEVELOPER_TOKEN` — required runtime secret;
+- `GOOGLE_ADS_CLIENT_ID` — required runtime secret;
+- `GOOGLE_ADS_CLIENT_SECRET` — required runtime secret;
+- `GOOGLE_ADS_REFRESH_TOKEN` — required runtime secret;
+- `GOOGLE_ADS_LOGIN_CUSTOMER_ID` — optional MCC login customer ID.
+
+Then run the same pipeline through the real provider:
+
+```bash
+python -m murat_ads_control \
+  --google-ads \
+  --as-of 2026-09-16 \
+  --json-out /tmp/murat-google-report.json \
+  --markdown-out /tmp/murat-google-report.md
+```
+
+Both modes implement `LOAD/READ → NORMALIZE → DIAGNOSE → REPORT`. Google Ads mode performs reads only; incomplete configuration fails closed.

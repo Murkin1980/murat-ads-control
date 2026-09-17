@@ -1,0 +1,2 @@
+# Official Google Ads API client required only for --google-ads mode.
+google-ads>=25.0.0
