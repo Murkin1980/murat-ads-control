@@ -86,6 +86,67 @@ Pending.
 
 ---
 
+## EXP-003 — Airtop Google Ads browser diagnostics
+
+**Status:** IDEA / READY_TO_TEST  
+**Target:** `bek-mebel.kz` Google Ads account  
+**Question:** Can Airtop inspect the real Google Ads UI and materially narrow or identify why the campaign does not deliver/spend, without requiring the blocked direct Google Ads API credential path?
+
+### Hypothesis
+Airtop can act as a temporary browser-execution adapter for read-only Google Ads diagnostics: open the authenticated account, inspect campaign/ad group/ad/keyword states and relevant UI evidence, and produce a traceable diagnosis that can be compared with Murat Ads Control's own diagnostic model.
+
+### Allowed scope
+
+```text
+HUMAN LOGIN / AUTHORIZED SESSION
+  ↓
+AIRTOP READ-ONLY BROWSER INSPECTION
+  ↓
+CAPTURE EVIDENCE
+  ↓
+MURAT ADS CONTROL DIAGNOSIS / COMPARISON
+  ↓
+REPORT
+```
+
+### First-run checks
+- campaign / ad group / ad / keyword effective status;
+- impressions and delivery history;
+- eligibility / policy / disapproval / limited status;
+- search volume and keyword constraints;
+- negative keywords or exclusions that may block traffic;
+- geographic targeting;
+- bidding strategy and budget;
+- conversion-tracking dependencies relevant to the current bidding strategy;
+- Quality Score / ad rank signals when available in the UI;
+- any explicit Google Ads diagnostics, recommendations, warnings, or account-level restrictions relevant to delivery.
+
+### Forbidden in the first experiment
+- publishing or enabling a campaign;
+- changing bids, budgets, targeting, keywords, negatives, ads, assets, conversions, or account settings;
+- autonomous optimization;
+- automatic approval;
+- storing Google credentials in the repository;
+- making Airtop a mandatory production dependency;
+- replacing the direct Google Ads API path without evidence and a separate decision.
+
+### PASS criteria
+1. Airtop successfully reaches the authorized Google Ads account.
+2. It inspects the relevant campaign state without production mutations.
+3. Root cause is identified or materially narrowed with reproducible UI evidence.
+4. The result adds information beyond the current blocked API path/manual inspection.
+5. Findings can be translated into a concrete Murat Ads Control diagnostic rule or next action.
+6. Zero production mutations.
+
+### Execution note
+This experiment is **not executed by Arena itself**. Arena/Codex may prepare prompts, scripts, evidence templates, compare outputs, and update repository artifacts. The live authenticated browser session runs through Airtop (or another authorized browser surface) with the owner controlling login/approval.
+
+### Evidence
+Pending owner Airtop registration and first authorized read-only Google Ads session.
+
+### Result
+Pending.
+
 ## Template
 
 ### EXP-NNN — Name
